@@ -7,7 +7,7 @@ let studentsList = '离丁真，王大锤，芜湖，起说飞，利达挠，圣
 async function getStudentsList() {
     try {
         // 将 localhost:8000 改为你的域名
-        const response = await fetch('https://www.allfather.top/elves/students');
+        const response = await fetch('改为你的域名'); 
         const data = await response.json();
         studentsList = data.students;
         // 分割并清理名单
