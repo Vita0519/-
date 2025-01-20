@@ -2,7 +2,7 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <title>学生名单管理</title>
     <style>
         body {
@@ -15,13 +15,13 @@
         .container {
             background-color: white;
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 8px; 
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         textarea {
             width: 100%;
             height: 200px;
-            margin: 10px 0;
+            margin: 10px 0; 
             padding: 10px;
             border: 1px solid #ddd;
             border-radius: 4px;
@@ -65,9 +65,9 @@
     <div class="container">
         <h2>学生名单管理</h2>
         <p>请输入学生名单，用逗号(，或,)分隔：</p>
-        <textarea id="studentList" placeholder="例如：张三，李四，王五"></textarea>
+        <textarea id="studentList" placeholder="例如：张三，李四，王五"></textarea> 
         <div class="error" id="error">请输入有效的学生名单！</div>
-        <div class="button-group">
+        <div class="button-group">  
             <button onclick="saveStudents()">保存</button>
             <button class="format-btn" onclick="formatList()">格式化</button>
         </div>
@@ -76,7 +76,7 @@
 
     <script>
         // 获取当前学生名单
-        fetch('https://www.allfather.top/elves/students')
+        fetch('改为你的域名')  
             .then(response => response.json())
             .then(data => {
                 document.getElementById('studentList').value = data.students;
@@ -84,7 +84,7 @@
 
         // 格式化名单
         function formatList() {
-            const textarea = document.getElementById('studentList');
+            const textarea = document.getElementById('studentList');  
             let names = textarea.value
                 .split(/[,，]/)  // 同时支持中英文逗号
                 .map(name => name.trim())  // 去除空格
@@ -127,7 +127,7 @@
             }
             errorElement.style.display = 'none';
 
-            fetch('https://www.allfather.top/elves/students', {
+            fetch('改为你的域名', { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
