@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生名单管理</title>
+    <style>
+        body {
+            font-family: 'yuansShen';
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f2f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .format-btn {
+            background-color: #2196F3;
+        }
+        .format-btn:hover {
+            background-color: #1976D2;
+        }
+        .tip {
+            color: #666;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .error {
+            color: #f44336;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>学生名单管理</h2>
+        <p>请输入学生名单，用逗号(，或,)分隔：</p>
+        <textarea id="studentList" placeholder="例如：张三，李四，王五"></textarea>
+        <div class="error" id="error">请输入有效的学生名单！</div>
+        <div class="button-group">
+            <button onclick="saveStudents()">保存</button>
+            <button class="format-btn" onclick="formatList()">格式化</button>
+        </div>
+        <p class="tip">提示：每次抽取后，已抽中的学生不会再次被抽中，直到名单重置。</p>
+    </div>
+
+    <script>
+        // 获取当前学生名单
+        fetch('https://www.allfather.top/elves/students')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('studentList').value = data.students;
+            });
+
+        // 格式化名单
+        function formatList() {
+            const textarea = document.getElementById('studentList');
+            let names = textarea.value
+                .split(/[,，]/)  // 同时支持中英文逗号
+                .map(name => name.trim())  // 去除空格
+                .filter(name => name)  // 去除空项
+                .map(name => name.replace(/\s+/g, ''));  // 去除名字中的所有空白字符
+
+            // 去重
+            names = [...new Set(names)];
+            
+            // 使用中文逗号连接，确保每个名字之间只有一个逗号
+            textarea.value = names.join('，');
+        }
+
+        // 验证名单
+        function validateList(value) {
+            if (!value.trim()) {
+                return false;
+            }
+            const names = value
+                .split(/[,，]/)
+                .map(name => name.trim())
+                .filter(name => name);
+            return names.length > 0;
+        }
+
+        // 保存学生名单
+        function saveStudents() {
+            const textarea = document.getElementById('studentList');
+            const errorElement = document.getElementById('error');
+            
+            // 先格式化
+            formatList();
+            
+            const students = textarea.value;
+            
+            // 验证
+            if (!validateList(students)) {
+                errorElement.style.display = 'block';
+                return;
+            }
+            errorElement.style.display = 'none';
+
+            fetch('https://www.allfather.top/elves/students', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    students: students
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('保存成功！');
+            })
+            .catch(error => {
+                alert('保存失败！');
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html> 
